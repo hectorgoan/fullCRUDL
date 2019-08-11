@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+.btn-outline-success {
+  color: #670fff;
+  border-color: #670fff;
+}
+.btn-outline-success:hover {
+  background: #312450;
+}

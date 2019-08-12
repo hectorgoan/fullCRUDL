@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import { ClientService } from '../shared/services/client.service';
 import { Client } from '../shared/models/client.model';
 import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -11,13 +12,18 @@ import {Router} from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  constructor(
+    private clientService: ClientService,
+    private router: Router,
+    private modalService: BsModalService
+  ) {}
 
-  constructor(private clientService: ClientService, private router: Router) {}
-
+  modalRef: BsModalRef;
   title = 'frontCRUDL';
   clients: Client[];
 
   client = new Client('', '');
+  clientOnAction = null;
 
   emailPattern = '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$';
 
@@ -55,5 +61,15 @@ export class HomeComponent implements OnInit {
           console.log('Error occured');
         }
       );
+  }
+
+  openEditModal(template: TemplateRef<any>, client: Client) {
+    this.clientOnAction = client;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  openRemoveModal(template: TemplateRef<any>, client: Client) {
+    this.clientOnAction = client;
+    this.modalRef = this.modalService.show(template);
   }
 }

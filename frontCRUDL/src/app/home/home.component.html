@@ -39,6 +39,7 @@
   <table class="table" style="text-align: center">
     <thead>
     <tr>
+      <th>ID</th>
       <th>Name</th>
       <th>Email</th>
       <th>Update</th>
@@ -47,20 +48,52 @@
     </thead>
     <tbody>
     <tr *ngFor="let client of clients">
+      <td>{{client.id}}</td>
       <td>{{client.name}}</td>
       <td>{{client.email}}</td>
       <td>
-        <button class="btn btn-outline-primary btn-xs">
+        <button class="btn btn-outline-primary btn-xs" (click)="openEditModal(modalEditTemplate, client)">
           <fa name="pencil"></fa>
         </button>
       </td>
       <td>
-        <button class="btn btn-outline-danger btn-xs" (click)="removeClient(client)" >
+        <button class="btn btn-outline-danger btn-xs" (click)="openRemoveModal(modalRemoveTemplate, client)" >
           <fa name="trash"></fa>
         </button>
       </td>
     </tr>
     </tbody>
   </table>
+
+  <ng-template #modalEditTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Modal</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+    </div>
+  </ng-template>
+
+  <ng-template #modalRemoveTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left"><strong>D</strong>elete</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h6>Do you really want to remove the client? </h6>
+      <br>
+      <p><strong>Name: </strong>{{clientOnAction.name}}</p>
+      <p><strong>Email: </strong>{{clientOnAction.email}}</p>
+      <hr>
+      <button type="button" class="btn btn-outline-danger float-right" (click)="removeClient(clientOnAction)" (click)="modalRef.hide()">
+        Yes, <strong>D</strong>elete it.
+      </button>
+    </div>
+  </ng-template>
 
 </div>

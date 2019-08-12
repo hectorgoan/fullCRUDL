@@ -107,6 +107,10 @@ class ClientController extends AbstractController
 
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function removeClient(Request $request)
     {
         // Get the posted data decoded and check parameters.
@@ -138,7 +142,6 @@ class ClientController extends AbstractController
             $response = new JsonResponse("Client not found in the DB", 400);
             return $this->addCORSToResponse($response);
         }
-        dump($tmpClientByEmail);
 
         $em = $this->getDoctrine()->getManager();
 
@@ -152,8 +155,66 @@ class ClientController extends AbstractController
 
         }catch (Exception $ex)
         {
-            dump($ex);
             $response = new JsonResponse("Some error occurred while removing the client", 400);
+            return $this->addCORSToResponse($response);
+        }
+
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateClient($id, Request $request)
+    {
+        // Get the posted data decoded and check parameters.
+        /** @var Client $submittedEntity */
+        $submittedEntity = $this->utilsService->deserializeAndValidate($request, Client::class);
+
+        if (!$this->utilsService->isValidVariable($submittedEntity))
+        {
+            $response = new JsonResponse("The posted entity is not valid.", 400);
+            return $this->addCORSToResponse($response);
+        }
+
+        // Detect missing parameters
+        if (
+            !$this->utilsService->isValidVariable($submittedEntity->getName())
+            ||
+            !$this->utilsService->isValidVariable($submittedEntity->getEmail())
+        )
+        {
+            $response = new JsonResponse("Missing parameters in the posted body", 400);
+            return $this->addCORSToResponse($response);
+        }
+
+        // Check if there's already an client with the purposed email
+        $tmpClientByID = $this->getDoctrine()->getRepository(Client::class)->find($id);
+        if (!$tmpClientByID)
+        {
+            $response = new JsonResponse("Client not found in the DB", 400);
+            return $this->addCORSToResponse($response);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Client $tmpClientByID */
+        $tmpClientByID->setName($submittedEntity->getName());
+        $tmpClientByID->setEmail($submittedEntity->getEmail());
+
+        // Try to remove the client
+        try
+        {
+            $em->persist($tmpClientByID);
+            $em->flush();
+            $em->refresh($tmpClientByID);
+
+            $response = new JsonResponse("Client successfully edited", 200);
+            return $this->addCORSToResponse($response);
+
+        }catch (Exception $ex)
+        {
+            $response = new JsonResponse("Some error occurred while editing the client", 400);
             return $this->addCORSToResponse($response);
         }
 

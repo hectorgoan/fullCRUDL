@@ -14,3 +14,7 @@ removeClient:
     path: /client
     methods: DELETE
     controller: App\Controller\ClientController::removeClient
+updateClient:
+    path: /client/{id}
+    methods: PUT
+    controller: App\Controller\ClientController::updateClient

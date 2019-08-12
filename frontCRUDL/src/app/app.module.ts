@@ -7,6 +7,7 @@ import { AlertModule } from 'ngx-bootstrap';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     AppRoutingModule,
     HttpClientModule,
     AngularFontAwesomeModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

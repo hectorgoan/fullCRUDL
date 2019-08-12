@@ -6,19 +6,34 @@
     <p><strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete or <strong>L</strong>ist Clients</p>
   </div>
   <hr>
-  <form>
+  <form #clientForm="ngForm" (ngSubmit)="addClient()">
     <div class="row">
       <div class="col-md-6 form-group">
-        <label for="inputName">Name</label>
-        <input type="text" class="form-control" id="inputName" placeholder="Client's name">
+        <label for="name">Name</label>
+        <input type="text"
+               class="form-control"
+               id="name"
+               [(ngModel)]="client.name"
+               name = "name"
+               required
+               placeholder="Client's name">
       </div>
       <div class="col-md-6 form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email addr">
+        <label for="email">Email address</label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               [(ngModel)]="client.email"
+               name = "email"
+               required
+               placeholder="Email addr"
+               [pattern]=emailPattern>
         <small id="emailHelp" class="form-text text-muted">We'll validate the string 😜</small>
       </div>
     </div>
-    <button type="submit" class="btn btn-outline-info">Add</button>
+    <button type="submit"
+            class="btn btn-outline-info"
+            [disabled]="!clientForm.form.valid">Add</button>
   </form>
   <br>
   <table class="table">

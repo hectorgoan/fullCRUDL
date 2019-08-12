@@ -107,6 +107,58 @@ class ClientController extends AbstractController
 
     }
 
+    public function removeClient(Request $request)
+    {
+        // Get the posted data decoded and check parameters.
+        /** @var Client $submittedEntity */
+        $submittedEntity = $this->utilsService->deserializeAndValidate($request, Client::class);
+
+        if (!$this->utilsService->isValidVariable($submittedEntity))
+        {
+            $response = new JsonResponse("The posted entity is not valid.", 400);
+            return $this->addCORSToResponse($response);
+        }
+
+        // Detect missing parameters
+        if (
+            !$this->utilsService->isValidVariable($submittedEntity->getName())
+            ||
+            !$this->utilsService->isValidVariable($submittedEntity->getEmail())
+        )
+        {
+            $response = new JsonResponse("Missing parameters in the posted body", 400);
+            return $this->addCORSToResponse($response);
+        }
+
+        // Check if there's already an client with the purposed email
+        $criteria = array('email' => $submittedEntity->getEmail());
+        $tmpClientByEmail = $this->getDoctrine()->getRepository(Client::class)->findBy($criteria);
+        if (!$tmpClientByEmail)
+        {
+            $response = new JsonResponse("Client not found in the DB", 400);
+            return $this->addCORSToResponse($response);
+        }
+        dump($tmpClientByEmail);
+
+        $em = $this->getDoctrine()->getManager();
+
+        // Try to remove the client
+        try
+        {
+            $em->remove($tmpClientByEmail[0]);
+            $em->flush();
+            $response = new JsonResponse("Client successfully removed", 200);
+            return $this->addCORSToResponse($response);
+
+        }catch (Exception $ex)
+        {
+            dump($ex);
+            $response = new JsonResponse("Some error occurred while removing the client", 400);
+            return $this->addCORSToResponse($response);
+        }
+
+    }
+
     public function addCORSToResponse(JsonResponse $response)
     {
         $response->headers->set('Content-Type', 'application/json');

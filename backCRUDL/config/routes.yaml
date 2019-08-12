@@ -10,3 +10,7 @@ addClient:
     path: /client
     methods: POST
     controller: App\Controller\ClientController::addClient
+removeClient:
+    path: /client
+    methods: DELETE
+    controller: App\Controller\ClientController::removeClient

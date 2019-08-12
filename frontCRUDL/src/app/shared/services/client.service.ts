@@ -1,7 +1,8 @@
 import {Client} from '../models/client.model';
 import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import {Observable, ObservedValueOf, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +10,46 @@ import { HttpClient } from '@angular/common/http';
 export class ClientService {
   constructor(private http: HttpClient) {}
 
-  apiUrl = 'assets/dummy.json';
+  apiUrl = 'http://localhost:8888';
 
-  getClients() {
-    return this.http.get(this.apiUrl);
+  getClients(): Observable<ObservedValueOf<any> | unknown> {
+    return this.http.get<Client >(this.apiUrl + '/clients')
+      .pipe(
+        map(res => res || [])
+    );
+  }
+
+  addClient(client: Client): Observable<ObservedValueOf<any> | unknown> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
+      })
+    };
+    return this.http.post<Client>(this.apiUrl + '/client', client, httpOptions);
+  }
+
+  removeClient(client: Client): Observable<ObservedValueOf<any> | unknown> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
+      }),
+      body: client
+    };
+    return this.http.delete<Client>(this.apiUrl + '/client', httpOptions);
+  }
+
+  editClient(client: Client, clientID: number): Observable<ObservedValueOf<any> | unknown> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
+      })
+    };
+    return this.http.put<Client>(this.apiUrl + '/client/' + clientID, client, httpOptions);
   }
 }

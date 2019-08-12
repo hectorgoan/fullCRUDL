@@ -1,11 +1,135 @@
 <div class="container" style="margin-top: 1pc">
   <div class="row">
-    <h5>
-      You're now watching the {{ title }} part of the fullCRUDL project!
-    </h5>
-    <button type="button" class="btn btn-primary" (click)="getClientsList()">
-      Button with tooltip
-    </button>
-    <alert type="success">hello</alert>
+    <h3>Home</h3>
   </div>
+  <div class="row">
+    <p><strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete and / or <strong>L</strong>ist Clients</p>
+  </div>
+  <hr>
+  <form #clientForm="ngForm" (ngSubmit)="addClient()">
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <label for="name">Name</label>
+        <input type="text"
+               class="form-control"
+               id="name"
+               [(ngModel)]="client.name"
+               name = "name"
+               required
+               placeholder="Client's name">
+      </div>
+      <div class="col-md-6 form-group">
+        <label for="email">Email address</label>
+        <input type="email"
+               class="form-control"
+               id="email"
+               [(ngModel)]="client.email"
+               name = "email"
+               required
+               placeholder="Email addr"
+               [pattern]=emailPattern>
+        <small id="emailHelp" class="form-text text-muted">We'll validate the string 😜</small>
+      </div>
+    </div>
+    <button type="submit"
+            class="btn btn-outline-info"
+            [disabled]="!clientForm.form.valid">Add</button>
+  </form>
+  <br>
+  <alert type="danger" style="text-align: center" [hidden]="!showAlert">
+    <strong>Oh snap!</strong> Some error occurred while processing your request. Refresh the page and try it again 🙂
+  </alert>
+  <table class="table" style="text-align: center">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let client of clients">
+      <td>{{client.id}}</td>
+      <td>{{client.name}}</td>
+      <td>{{client.email}}</td>
+      <td>
+        <button class="btn btn-outline-primary btn-xs" (click)="openEditModal(modalEditTemplate, client, client.id)">
+          <fa name="pencil"></fa>
+        </button>
+      </td>
+      <td>
+        <button class="btn btn-outline-danger btn-xs" (click)="openRemoveModal(modalRemoveTemplate, client)" >
+          <fa name="trash"></fa>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <ng-template #modalEditTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left"><strong>U</strong>pdate</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #clientFormEdit="ngForm" (ngSubmit)="editClient(clientOnAction, clientOnActionID)">
+        <div class="row">
+          <div class="col-md-6 form-group">
+            <label for="nameEdit">Name</label>
+            <input type="text"
+                   class="form-control"
+                   id="nameEdit"
+                   [(ngModel)]="clientOnAction.name"
+                   name = "name"
+                   required
+                   placeholder="Client's name">
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="emailEdit">Email address</label>
+            <input type="email"
+                   class="form-control"
+                   id="emailEdit"
+                   [(ngModel)]="clientOnAction.email"
+                   name = "email"
+                   required
+                   placeholder="Email addr"
+                   [pattern]=emailPattern>
+            <small id="emailHelpEdit" class="form-text text-muted">We'll validate the string 😜</small>
+          </div>
+        </div>
+        <button type="submit"
+                class="btn btn-outline-primary float-right"
+                (click)="modalRef.hide()"
+                [disabled]="!clientFormEdit.form.valid">
+          <strong>U</strong>pdate
+        </button>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template #modalRemoveTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left"><strong>D</strong>elete</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h6>Do you really want to remove the client? </h6>
+      <br>
+      <p><strong>Name: </strong>{{clientOnAction.name}}</p>
+      <p><strong>Email: </strong>{{clientOnAction.email}}</p>
+      <hr>
+      <button type="button" class="btn btn-outline-danger float-right" (click)="removeClient(clientOnAction)" (click)="modalRef.hide()">
+        Yes, <strong>D</strong>elete it.
+      </button>
+    </div>
+  </ng-template>
+
+  <ngx-loading [show]="loading"></ngx-loading>
+
 </div>

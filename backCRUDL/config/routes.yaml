@@ -1,0 +1,20 @@
+index:
+    path: /
+    methods: GET
+    controller: App\Controller\MainController::main
+getClients:
+    path: /clients
+    methods: GET
+    controller: App\Controller\ClientController::getAll
+addClient:
+    path: /client
+    methods: POST
+    controller: App\Controller\ClientController::addClient
+removeClient:
+    path: /client
+    methods: DELETE
+    controller: App\Controller\ClientController::removeClient
+updateClient:
+    path: /client/{id}
+    methods: PUT
+    controller: App\Controller\ClientController::updateClient

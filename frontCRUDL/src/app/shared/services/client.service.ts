@@ -41,4 +41,15 @@ export class ClientService {
     };
     return this.http.delete<Client>(this.apiUrl + '/client', httpOptions);
   }
+
+  editClient(client: Client, clientID: number): Observable<ObservedValueOf<any> | unknown> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
+      })
+    };
+    return this.http.put<Client>(this.apiUrl + '/client/' + clientID, client, httpOptions);
+  }
 }

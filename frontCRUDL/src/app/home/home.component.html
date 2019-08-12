@@ -52,7 +52,7 @@
       <td>{{client.name}}</td>
       <td>{{client.email}}</td>
       <td>
-        <button class="btn btn-outline-primary btn-xs" (click)="openEditModal(modalEditTemplate, client)">
+        <button class="btn btn-outline-primary btn-xs" (click)="openEditModal(modalEditTemplate, client, client.id)">
           <fa name="pencil"></fa>
         </button>
       </td>
@@ -73,7 +73,38 @@
       </button>
     </div>
     <div class="modal-body">
-
+      <form #clientFormEdit="ngForm" (ngSubmit)="editClient(clientOnAction, clientOnActionID)">
+        <div class="row">
+          <div class="col-md-6 form-group">
+            <label for="nameEdit">Name</label>
+            <input type="text"
+                   class="form-control"
+                   id="nameEdit"
+                   [(ngModel)]="clientOnAction.name"
+                   name = "name"
+                   required
+                   placeholder="Client's name">
+          </div>
+          <div class="col-md-6 form-group">
+            <label for="emailEdit">Email address</label>
+            <input type="email"
+                   class="form-control"
+                   id="emailEdit"
+                   [(ngModel)]="clientOnAction.email"
+                   name = "email"
+                   required
+                   placeholder="Email addr"
+                   [pattern]=emailPattern>
+            <small id="emailHelpEdit" class="form-text text-muted">We'll validate the string 😜</small>
+          </div>
+        </div>
+        <button type="submit"
+                class="btn btn-outline-primary float-right"
+                (click)="modalRef.hide()"
+                [disabled]="!clientFormEdit.form.valid">
+          <strong>U</strong>pdate
+        </button>
+      </form>
     </div>
   </ng-template>
 

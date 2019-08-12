@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
 
   client = new Client('', '');
   clientOnAction = null;
+  clientOnActionID = null;
 
   emailPattern = '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$';
 
@@ -63,8 +64,26 @@ export class HomeComponent implements OnInit {
       );
   }
 
-  openEditModal(template: TemplateRef<any>, client: Client) {
+  editClient(client: Client, clientID: number) {
+    console.log(client);
+    console.log(clientID);
+    const submitClient = new Client(client.name, client.email);
+    this.clientService.editClient(submitClient, clientID)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+            this.router.navigate(['/home']));
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
+  }
+
+  openEditModal(template: TemplateRef<any>, client: Client, clientID: number) {
     this.clientOnAction = client;
+    this.clientOnActionID = clientID;
     this.modalRef = this.modalService.show(template);
   }
 

@@ -1,7 +1,8 @@
 import {Client} from '../models/client.model';
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { catchError, map } from 'rxjs/operators';
+import {Observable, ObservedValueOf, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +10,12 @@ import { HttpClient } from '@angular/common/http';
 export class ClientService {
   constructor(private http: HttpClient) {}
 
-  apiUrl = 'assets/dummy.json';
+  apiUrl = 'http://localhost:8888';
 
-  getClients() {
-    return this.http.get(this.apiUrl);
+  getClients(): Observable<ObservedValueOf<any> | unknown> {
+    return this.http.get<Client >(this.apiUrl + '/clients')
+      .pipe(
+        map(res => res || [])
+    );
   }
 }

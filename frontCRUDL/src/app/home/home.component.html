@@ -36,6 +36,9 @@
             [disabled]="!clientForm.form.valid">Add</button>
   </form>
   <br>
+  <alert type="danger" style="text-align: center" [hidden]="!showAlert">
+    <strong>Oh snap!</strong> Some error occurred while processing your request. Refresh the page and try it again 🙂
+  </alert>
   <table class="table" style="text-align: center">
     <thead>
     <tr>

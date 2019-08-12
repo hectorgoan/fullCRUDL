@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
 
   public loading = true;
 
+  public showAlert = false;
+
   modalRef: BsModalRef;
   title = 'frontCRUDL';
   clients: Client[];
@@ -47,7 +49,7 @@ export class HomeComponent implements OnInit {
             this.router.navigate(['/home']));
         },
         err => {
-          console.log('Error occured');
+          this.showAlert = true;
         }
       );
   }
@@ -63,7 +65,7 @@ export class HomeComponent implements OnInit {
             this.router.navigate(['/home']));
         },
         err => {
-          console.log('Error occured');
+          this.showAlert = true;
         }
       );
   }
@@ -79,7 +81,7 @@ export class HomeComponent implements OnInit {
             this.router.navigate(['/home']));
         },
         err => {
-          console.log('Error occured');
+          this.showAlert = true;
         }
       );
   }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../shared/services/client.service';
 import { Client } from '../shared/models/client.model';
 import {map} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -11,7 +12,7 @@ import {map} from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService, private router: Router) {}
 
   title = 'frontCRUDL';
   clients: Client[];
@@ -32,6 +33,23 @@ export class HomeComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+            this.router.navigate(['/home']));
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
+  }
+
+  removeClient(client: Client) {
+    const submitClient = new Client(client.name, client.email);
+    this.clientService.removeClient(submitClient)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+            this.router.navigate(['/home']));
         },
         err => {
           console.log('Error occured');

@@ -3,7 +3,7 @@
     <h3>Home</h3>
   </div>
   <div class="row">
-    <p><strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete or <strong>L</strong>ist Clients</p>
+    <p><strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, <strong>D</strong>elete and / or <strong>L</strong>ist Clients</p>
   </div>
   <hr>
   <form #clientForm="ngForm" (ngSubmit)="addClient()">
@@ -36,21 +36,29 @@
             [disabled]="!clientForm.form.valid">Add</button>
   </form>
   <br>
-  <table class="table">
+  <table class="table" style="text-align: center">
     <thead>
     <tr>
-      <th>Id</th>
       <th>Name</th>
       <th>Email</th>
-      <th>Actions</th>
+      <th>Update</th>
+      <th>Delete</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let client of clients">
-      <td>{{client.id}}</td>
       <td>{{client.name}}</td>
       <td>{{client.email}}</td>
-      <td><button class="btn btn-outline-danger"><fa name="trash"></fa></button></td>
+      <td>
+        <button class="btn btn-outline-primary btn-xs">
+          <fa name="pencil"></fa>
+        </button>
+      </td>
+      <td>
+        <button class="btn btn-outline-danger btn-xs" (click)="removeClient(client)" >
+          <fa name="trash"></fa>
+        </button>
+      </td>
     </tr>
     </tbody>
   </table>

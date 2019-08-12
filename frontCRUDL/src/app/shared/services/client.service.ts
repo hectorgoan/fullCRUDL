@@ -11,13 +11,6 @@ export class ClientService {
   constructor(private http: HttpClient) {}
 
   apiUrl = 'http://localhost:8888';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*'
-    })
-  };
 
   getClients(): Observable<ObservedValueOf<any> | unknown> {
     return this.http.get<Client >(this.apiUrl + '/clients')
@@ -27,6 +20,25 @@ export class ClientService {
   }
 
   addClient(client: Client): Observable<ObservedValueOf<any> | unknown> {
-    return this.http.post<Client>(this.apiUrl + '/client', client, this.httpOptions);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
+      })
+    };
+    return this.http.post<Client>(this.apiUrl + '/client', client, httpOptions);
+  }
+
+  removeClient(client: Client): Observable<ObservedValueOf<any> | unknown> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*'
+      }),
+      body: client
+    };
+    return this.http.delete<Client>(this.apiUrl + '/client', httpOptions);
   }
 }

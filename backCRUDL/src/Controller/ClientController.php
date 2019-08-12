@@ -38,10 +38,7 @@ class ClientController extends AbstractController
             $response = new JsonResponse('Clients not found', 404);
         }
 
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        return $response;
+        return $this->addCORSToResponse($response);
     }
 
     /**
@@ -56,7 +53,8 @@ class ClientController extends AbstractController
 
         if (!$this->utilsService->isValidVariable($submittedEntity))
         {
-            return new JsonResponse("The posted entity is not valid.", 400);
+            $response = new JsonResponse("The posted entity is not valid.", 400);
+            return $this->addCORSToResponse($response);
         }
 
         // Detect missing parameters
@@ -66,7 +64,8 @@ class ClientController extends AbstractController
             !$this->utilsService->isValidVariable($submittedEntity->getEmail())
         )
         {
-            return new JsonResponse("Missing parameters in the posted body", 400);
+            $response = new JsonResponse("Missing parameters in the posted body", 400);
+            return $this->addCORSToResponse($response);
         }
 
         // Check if there's already an client with the purposed email
@@ -74,7 +73,8 @@ class ClientController extends AbstractController
         $tmpClientByEmail = $this->getDoctrine()->getRepository(Client::class)->findBy($criteria);
         if ($tmpClientByEmail)
         {
-            return new JsonResponse("Email already in use", 400);
+            $response = new JsonResponse("Email already in use", 400);
+            return $this->addCORSToResponse($response);
         }
 
         // Try to create the client
@@ -91,16 +91,27 @@ class ClientController extends AbstractController
 
         } catch (Exception $ex)
         {
-            return new JsonResponse("Some error occurred while creating the new client", 400);
+            $response = new JsonResponse("Some error occurred while creating the new client", 400);
+            return $this->addCORSToResponse($response);
         }
 
         if ($this->utilsService->isValidVariable($client))
         {
-            return new JsonResponse($client->jsonSerialize(), 200);
+            $response = new JsonResponse($client->jsonSerialize(), 200);
+            return $this->addCORSToResponse($response);
         }else
         {
-            return new JsonResponse("Some error occurred while creating the new client", 400);
+            $response = new JsonResponse("Some error occurred while creating the new client", 400);
+            return $this->addCORSToResponse($response);
         }
 
+    }
+
+    public function addCORSToResponse(JsonResponse $response)
+    {
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        return $response;
     }
 }

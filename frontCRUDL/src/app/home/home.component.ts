@@ -28,8 +28,14 @@ export class HomeComponent implements OnInit {
   }
 
   addClient() {
-    console.log(this.client);
+    this.clientService.addClient(this.client)
+      .subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
   }
-
-
 }

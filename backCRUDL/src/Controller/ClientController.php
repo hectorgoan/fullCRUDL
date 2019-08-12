@@ -162,6 +162,7 @@ class ClientController extends AbstractController
     }
 
     /**
+     * @param $id
      * @param Request $request
      * @return JsonResponse
      */

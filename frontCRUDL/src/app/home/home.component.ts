@@ -18,6 +18,8 @@ export class HomeComponent implements OnInit {
     private modalService: BsModalService
   ) {}
 
+  public loading = true;
+
   modalRef: BsModalRef;
   title = 'frontCRUDL';
   clients: Client[];
@@ -32,14 +34,15 @@ export class HomeComponent implements OnInit {
     this.clientService.getClients()
       .pipe(map((data: Client[]) => this.clients = data))
       .toPromise()
-    .then(x => console.log(this.clients));
+    .then(x => this.loading = false);
   }
 
   addClient() {
+    this.loading = true;
     this.clientService.addClient(this.client)
       .subscribe(
         res => {
-          console.log(res);
+          this.loading = false;
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
             this.router.navigate(['/home']));
         },
@@ -50,11 +53,12 @@ export class HomeComponent implements OnInit {
   }
 
   removeClient(client: Client) {
+    this.loading = true;
     const submitClient = new Client(client.name, client.email);
     this.clientService.removeClient(submitClient)
       .subscribe(
         res => {
-          console.log(res);
+          this.loading = false;
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
             this.router.navigate(['/home']));
         },
@@ -65,13 +69,12 @@ export class HomeComponent implements OnInit {
   }
 
   editClient(client: Client, clientID: number) {
-    console.log(client);
-    console.log(clientID);
+    this.loading = true;
     const submitClient = new Client(client.name, client.email);
     this.clientService.editClient(submitClient, clientID)
       .subscribe(
         res => {
-          console.log(res);
+          this.loading = false;
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
             this.router.navigate(['/home']));
         },

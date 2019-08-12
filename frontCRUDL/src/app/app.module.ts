@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { FormsModule } from '@angular/forms';
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 
 
 @NgModule({
@@ -23,7 +24,14 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     AngularFontAwesomeModule,
-    FormsModule
+    FormsModule,
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.pulse,
+      backdropBorderRadius: '4px',
+      primaryColour: '#ffffff',
+      secondaryColour: '#ccc',
+      tertiaryColour: '#ffffff'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

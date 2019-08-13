@@ -1,9 +1,10 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import { ClientService } from '../shared/services/client.service';
 import { Client } from '../shared/models/client.model';
-import {map} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import {error} from 'util';
 
 
 @Component({
@@ -34,9 +35,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.clientService.getClients()
-      .pipe(map((data: Client[]) => this.clients = data))
-      .toPromise()
-    .then(x => this.loading = false);
+      .pipe(
+        map((data: Client[]) => this.clients = data))
+      .toPromise().catch((err) => this.loading = false)
+    .then(x =>  this.loading = false );
   }
 
   addClient() {
